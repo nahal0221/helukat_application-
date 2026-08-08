@@ -2,6 +2,7 @@ package com.yourcompany.fieldtech.data.remote
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
@@ -12,7 +13,7 @@ private val Context.dataStore by preferencesDataStore(name = "auth_tokens")
 
 @Singleton
 class TokenStore @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
     private val accessTokenKey = stringPreferencesKey("access_token")
     private val refreshTokenKey = stringPreferencesKey("refresh_token")
