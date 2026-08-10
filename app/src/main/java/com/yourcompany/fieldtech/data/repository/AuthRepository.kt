@@ -9,13 +9,22 @@ class AuthRepository @Inject constructor(
     private val api: ApiService,
     private val tokenStore: TokenStore
 ) {
-    suspend fun login(email: String, password: String): Result<Unit> = try {
+suspend fun login(email: String, password: String): Result<Unit> {
+    // TEMPORARY: dummy login for testing without a real backend.
+    // Remove this block once a real API is wired up.
+    if (email == "test@test.com" && password == "test123") {
+        tokenStore.save("dummy_access_token", "dummy_refresh_token")
+        return Result.success(Unit)
+    }
+
+    return try {
         val response = api.login(LoginRequest(email, password))
         tokenStore.save(response.accessToken, response.refreshToken)
         Result.success(Unit)
     } catch (e: Exception) {
         Result.failure(e)
     }
+}
 
     suspend fun logout() {
         runCatching { api.logout() }
